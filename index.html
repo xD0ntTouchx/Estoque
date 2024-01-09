@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Estoque</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .category {
+            margin-top: 20px;
+        }
+
+        .category h3 {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Controle de Estoque</h2>
+
+    <div class="category" id="tintas">
+        <h3>Tintas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cor</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody id="tintasTableBody"></tbody>
+        </table>
+    </div>
+
+    <div class="category" id="papeis">
+        <h3>Papéis</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody id="papeisTableBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDICa5qOP8Z48Hwx4J2DuSK_Wkpjja6W-s",
+  authDomain: "estoque-5b592.firebaseapp.com",
+  databaseURL: "https://estoque-5b592-default-rtdb.firebaseio.com",
+  projectId: "estoque-5b592",
+  storageBucket: "estoque-5b592.appspot.com",
+  messagingSenderId: "277205455610",
+  appId: "1:277205455610:web:a677fe7c54ad933da4ef43"
+        };
+
+        // Inicialização do Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Referência ao banco de dados do Firebase
+        const database = firebase.database();
+
+        // Itens predefinidos
+        const itensTintas = {
+            ciano: { nome: 'Ciano', quantidade: 0 },
+            magenta: { nome: 'Magenta', quantidade: 0 },
+            amarelo: { nome: 'Amarelo', quantidade: 0 },
+            preto: { nome: 'Preto', quantidade: 0 }
+        };
+
+        const itensPapeis = {
+            seda50g: { nome: 'Seda 50g', quantidade: 0 },
+            liso60g: { nome: 'Liso 60g', quantidade: 0 },
+            havir: { nome: 'Havir', quantidade: 0 },
+            tratado160m: { nome: 'Tratado 1,60m', quantidade: 0 }
+        };
+
+        // Adicionar itens ao Firebase se não existirem
+        for (const [key, item] of Object.entries(itensTintas)) {
+            database.ref(`tintas/${key}`).once('value')
+                .then(snapshot => {
+                    if (!snapshot.exists()) {
+                        database.ref(`tintas/${key}`).set(item);
+                    }
+                });
+        }
+
+        for (const [key, item] of Object.entries(itensPapeis)) {
+            database.ref(`papeis/${key}`).once('value')
+                .then(snapshot => {
+                    if (!snapshot.exists()) {
+                        database.ref(`papeis/${key}`).set(item);
+                    }
+                });
+        }
+
+        // Exibir itens
+        function displayItems(category) {
+            const tableBodyId = category === 'tintas' ? 'tintasTableBody' : 'papeisTableBody';
+            const tableBody = document.getElementById(tableBodyId);
+            tableBody.innerHTML = "";
+
+            database.ref(category).once("value")
+                .then(snapshot => {
+                    const items = snapshot.val();
+
+                    if (items) {
+                        for (const key in items) {
+                            const item = items[key];
+                            const newRow = document.createElement("tr");
+                            newRow.innerHTML = `<td>${item.nome}</td>
+                                               <td>${item.quantidade}</td>`;
+                            tableBody.appendChild(newRow);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao obter os dados do Firebase:', error);
+                });
+        }
+
+        // Carregar itens ao carregar a página
+        window.onload = function() {
+            displayItems('tintas');
+            displayItems('papeis');
+        };
+    </script>
+
+</body>
+</html>
