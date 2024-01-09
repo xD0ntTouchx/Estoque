@@ -36,6 +36,28 @@
             background-color: #4caf50;
             color: white;
         }
+
+        .editButton {
+            background-color: transparent;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .editIcon {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .quantityContainer {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -88,17 +110,17 @@
 
         // Itens predefinidos
         const itensTintas = {
-            ciano: { nome: 'Ciano', quantidade: 0 },
-            magenta: { nome: 'Magenta', quantidade: 0 },
-            amarelo: { nome: 'Amarelo', quantidade: 0 },
-            preto: { nome: 'Preto', quantidade: 0 }
+            Ciano: { nome: 'Ciano', quantidade: 0 },
+            Magenta: { nome: 'Magenta', quantidade: 0 },
+            Amarelo: { nome: 'Amarelo', quantidade: 0 },
+            Preto: { nome: 'Preto', quantidade: 0 }
         };
 
         const itensPapeis = {
-            seda50g: { nome: 'Seda 50g', quantidade: 0 },
-            liso60g: { nome: 'Liso 60g', quantidade: 0 },
-            havir: { nome: 'Havir', quantidade: 0 },
-            tratado160m: { nome: 'Tratado 1,60m', quantidade: 0 }
+            Seda50g: { nome: 'Seda 50g', quantidade: 0 },
+            Liso60g: { nome: 'Liso 60g', quantidade: 0 },
+            Havir: { nome: 'Havir', quantidade: 0 },
+            Tratado160m: { nome: 'Tratado 1,60m', quantidade: 0 }
         };
 
         // Adicionar itens ao Firebase se não existirem
@@ -135,7 +157,12 @@
                             const item = items[key];
                             const newRow = document.createElement("tr");
                             newRow.innerHTML = `<td>${item.nome}</td>
-                                               <td>${item.quantidade}</td>`;
+                                               <td class="quantityContainer">
+                                                   <span class="quantity">${item.quantidade}</span>
+                                                   <button class="editButton" onclick="editQuantity('${category}', '${key}', ${item.quantidade})">
+                                                       <span class="editIcon">&#9998;</span>
+                                                   </button>
+                                               </td>`;
                             tableBody.appendChild(newRow);
                         }
                     }
@@ -143,6 +170,24 @@
                 .catch(error => {
                     console.error('Erro ao obter os dados do Firebase:', error);
                 });
+        }
+
+        // Editar quantidade
+        function editQuantity(category, itemName, quantidadeAtual) {
+            const novaQuantidade = prompt(`Informe a nova quantidade para ${itemName}:`, quantidadeAtual);
+            if (novaQuantidade !== null && !isNaN(novaQuantidade)) {
+                const item = {};
+                item[itemName] = {
+                    nome: itemName,
+                    quantidade: parseInt(novaQuantidade)
+                };
+
+                // Salvar no Firebase
+                database.ref(category).update(item);
+
+                // Atualizar a exibição
+                displayItems(category);
+            }
         }
 
         // Carregar itens ao carregar a página
