@@ -26,13 +26,13 @@
         }
 
         .logo-container img {
-            max-width: 10%; /* Garante que a imagem não ultrapasse a largura da div pai */
-            height: auto; /* Garante que a altura seja ajustada proporcionalmente à largura */
+            max-width: 10%;
+            height: auto;
         }
 
         h1 {
             color: #007093;
-            margin: 10px 200px 10px 200px; /* ajustado para adicionar margem inferior e reduzir margem superior */
+            margin: 10px 200px 10px 200px;
             width: 80%;
         }
 
@@ -72,15 +72,18 @@
             color: white;
         }
 
-        .editButton {
+        .increaseButton,
+        .decreaseButton {
             background-color: transparent;
             border: none;
             padding: 6px;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin: 2px;
         }
 
-        .editButton:hover {
+        .increaseButton:hover,
+        .decreaseButton:hover {
             background-color: #e5e5e5;
         }
 
@@ -112,7 +115,8 @@
 <body>
 
     <div class="logo-container">
-        <img src="https://gusel.com.br/wp-content/uploads/sites/33/2022/11/cropped-gusel-logo-1.png" alt="Logo da Empresa">
+        <img src="https://gusel.com.br/wp-content/uploads/sites/33/2022/11/cropped-gusel-logo-1.png"
+            alt="Logo da Empresa">
     </div>
 
     <h1>Estoque de Itens</h1>
@@ -240,8 +244,13 @@
                             newRow.innerHTML = `<td>${item.nome}</td>
                                                <td class="quantityContainer">
                                                    <span class="quantity">${item.quantidade}</span>
-                                                   <button class="editButton" onclick="editQuantity('${category}', '${key}', ${item.quantidade})">
-                                                       <span class="editIcon">&#9998;</span>
+                                                   <button class="increaseButton"
+                                                       onclick="changeQuantity('${category}', '${key}', 'increase')">
+                                                       <span class="editIcon">&#43;</span>
+                                                   </button>
+                                                   <button class="decreaseButton"
+                                                       onclick="changeQuantity('${category}', '${key}', 'decrease')">
+                                                       <span class="editIcon">&#8722;</span>
                                                    </button>
                                                </td>`;
                             tableBody.appendChild(newRow);
@@ -254,21 +263,29 @@
         }
 
         // Editar quantidade
-        function editQuantity(category, itemName, quantidadeAtual) {
-            const novaQuantidade = prompt(`Informe a nova quantidade para ${itemName}:`, quantidadeAtual);
-            if (novaQuantidade !== null && !isNaN(novaQuantidade)) {
-                const item = {};
-                item[itemName] = {
-                    nome: itemName,
-                    quantidade: parseInt(novaQuantidade)
-                };
+        function changeQuantity(category, itemName, action) {
+            const itemRef = database.ref(`${category}/${itemName}`);
 
-                // Salvar no Firebase
-                database.ref(category).update(item);
+            itemRef.once("value")
+                .then(snapshot => {
+                    const item = snapshot.val();
+                    let novaQuantidade = item.quantidade;
 
-                // Atualizar a exibição
-                displayItems(category);
-            }
+                    if (action === 'increase') {
+                        novaQuantidade++;
+                    } else if (action === 'decrease' && novaQuantidade > 0) {
+                        novaQuantidade--;
+                    }
+
+                    // Atualizar a quantidade no Firebase
+                    itemRef.update({ quantidade: novaQuantidade });
+
+                    // Atualizar a exibição
+                    displayItems(category);
+                })
+                .catch(error => {
+                    console.error('Erro ao obter os dados do Firebase:', error);
+                });
         }
 
         // Carregar itens ao carregar a página
