@@ -147,152 +147,250 @@
         </table>
     </div>
 
+    <div class="category" id="tecidos">
+        <h3>Tecidos</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody id="tecidosTableBody"></tbody>
+        </table>
+    </div>
+
     <div class="signature">Made by Filipin</div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDICa5qOP8Z48Hwx4J2DuSK_Wkpjja6W-s",
-            authDomain: "estoque-5b592.firebaseapp.com",
-            databaseURL: "https://estoque-5b592-default-rtdb.firebaseio.com",
-            projectId: "estoque-5b592",
-            storageBucket: "estoque-5b592.appspot.com",
-            messagingSenderId: "277205455610",
-            appId: "1:277205455610:web:a677fe7c54ad933da4ef43"
-        };
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Configuração do Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyDICa5qOP8Z48Hwx4J2DuSK_Wkpjja6W-s",
+                authDomain: "estoque-5b592.firebaseapp.com",
+                databaseURL: "https://estoque-5b592-default-rtdb.firebaseio.com",
+                projectId: "estoque-5b592",
+                storageBucket: "estoque-5b592.appspot.com",
+                messagingSenderId: "277205455610",
+                appId: "1:277205455610:web:a677fe7c54ad933da4ef43"
+            };
 
-        // Inicialização do Firebase
-        firebase.initializeApp(firebaseConfig);
+            // Inicialização do Firebase
+            firebase.initializeApp(firebaseConfig);
 
-        // Referência ao banco de dados do Firebase
-        const database = firebase.database();
+            // Referência ao banco de dados do Firebase
+            const database = firebase.database();
 
-        // Itens predefinidos
-        const itensTintas = {
-            Ciano: {
-                nome: 'Ciano',
-                quantidade: 0
-            },
-            Magenta: {
-                nome: 'Magenta',
-                quantidade: 0
-            },
-            Amarelo: {
-                nome: 'Amarelo',
-                quantidade: 0
-            },
-            Preto: {
-                nome: 'Preto',
-                quantidade: 0
+            // Itens predefinidos
+            const itensTintas = {
+                CIANO: {
+                    nome: 'CIANO',
+                    quantidade: 0
+                },
+                MAGENTA: {
+                    nome: 'MAGENTA',
+                    quantidade: 2
+                },
+                AMARELO: {
+                    nome: 'AMARELO',
+                    quantidade: 3
+                },
+                PRETO: {
+                    nome: 'PRETO',
+                    quantidade: 0
+                }
+            };
+
+            const itensPapeis = {
+                SEDA50G: {
+                    nome: 'SEDA 50G',
+                    quantidade: 0
+                },
+                LISO60G: {
+                    nome: 'LISO 60G',
+                    quantidade: 0
+                },
+                HAVIR: {
+                    nome: 'HAVIR',
+                    quantidade: 2
+                },
+                TRATADO160M: {
+                    nome: 'TRATADO 1,60M',
+                    quantidade: 11
+                },
+                VEGETAL_A3: {
+                    nome: 'VEGETAL A3',
+                    quantidade: 0
+                },
+                KRAFT: {
+                    nome: 'KRAFT',
+                    quantidade: 3
+                },
+                VEGETAL_A4: {
+                    nome: 'VEGETAL A4',
+                    quantidade: 0
+                }
+            };
+
+            const itensTecidos = {
+                "HELANCA_LIGHT": {
+                    nome: 'HELANCA LIGHT / 1,80M',
+                    quantidade: 3
+                },
+                "DRY_SPORT_BRASIL": {
+                    nome: 'DRY SPORT BRASIL / 1,80M',
+                    quantidade: 26
+                },
+                "DRY_180_EF": {
+                    nome: 'DRY 180 EF / 1,80M',
+                    quantidade: 6
+                },
+                "DRY_180_PLUS_EF": {
+                    nome: 'DRY 180 PLUS EF / 1,60M',
+                    quantidade: 0
+                },
+                "JIMP_DRY_BRASIL_180M": {
+                    nome: 'JIMP DRY BRASIL / 1,80M',
+                    quantidade: 16
+                },
+                "JIMP_DRY_BRASIL_160M": {
+                    nome: 'JIMP DRY BRASIL / 1,60M',
+                    quantidade: 17
+                },
+                "MANCHESTER_MADRID_180M": {
+                    nome: 'MANCHESTER / MADRID / 1,80M',
+                    quantidade: 3
+                },
+                "DRY_UV_EMATEX_160M": {
+                    nome: 'DRY UV EMATEX / 1,60M',
+                    quantidade: 4
+                },
+                "GABARDINE_150M": {
+                    nome: 'GABARDINE / 1,50M',
+                    quantidade: 0
+                },
+                "CHIMPA_160M": {
+                    nome: 'CHIMPA / 1,60M',
+                    quantidade: 5
+                },
+                "FURADINHO_160M": {
+                    nome: 'FURADINHO / 1,60M',
+                    quantidade: 1
+                },
+                "NBA_160M": {
+                    nome: 'NBA / 1,60M',
+                    quantidade: 2
+                },
+                "NBA_FURADO_160M": {
+                    nome: 'NBA FURADO / 1,60M',
+                    quantidade: 1
+                },
+                "OXFORD_150M": {
+                    nome: 'OXFORD / 1,50M',
+                    quantidade: 0
+                },
+                "OXFORDINE_150M": {
+                    nome: 'OXFORDINE / 1,50M',
+                    quantidade: 0
+                },
+                "MICROFIBRA_180M": {
+                    nome: 'MICROFIBRA / 1,80M',
+                    quantidade: 0
+                },
+                "QUADRADINHO": {
+                    nome: 'QUADRADINHO',
+                    quantidade: 1
+                },
+                "TACTEL": {
+                    nome: 'TACTEL',
+                    quantidade: 1
+                }
+            };
+
+            // Adicionar itens ao Firebase se não existirem
+            function addItemsToFirebase(category, items) {
+                for (const [key, item] of Object.entries(items)) {
+                    database.ref(`${category}/${key}`).once('value')
+                        .then(snapshot => {
+                            if (!snapshot.exists()) {
+                                database.ref(`${category}/${key}`).set(item);
+                            }
+                        });
+                }
             }
-        };
 
-        const itensPapeis = {
-            Seda50g: {
-                nome: 'Seda 50g',
-                quantidade: 0
-            },
-            Liso60g: {
-                nome: 'Liso 60g',
-                quantidade: 0
-            },
-            Havir: {
-                nome: 'Havir',
-                quantidade: 0
-            },
-            Tratado160m: {
-                nome: 'Tratado 1,60m',
-                quantidade: 0
-            }
-        };
+            addItemsToFirebase('tintas', itensTintas);
+            addItemsToFirebase('papeis', itensPapeis);
+            addItemsToFirebase('tecidos', itensTecidos);
 
-        // Adicionar itens ao Firebase se não existirem
-        for (const [key, item] of Object.entries(itensTintas)) {
-            database.ref(`tintas/${key}`).once('value')
-                .then(snapshot => {
-                    if (!snapshot.exists()) {
-                        database.ref(`tintas/${key}`).set(item);
-                    }
-                });
-        }
+            // Exibir itens
+            function displayItems(category) {
+                const tableBodyId = `${category}TableBody`;
+                const tableBody = document.getElementById(tableBodyId);
+                tableBody.innerHTML = "";
 
-        for (const [key, item] of Object.entries(itensPapeis)) {
-            database.ref(`papeis/${key}`).once('value')
-                .then(snapshot => {
-                    if (!snapshot.exists()) {
-                        database.ref(`papeis/${key}`).set(item);
-                    }
-                });
-        }
+                database.ref(category).once("value")
+                    .then(snapshot => {
+                        const items = snapshot.val();
 
-        // Exibir itens
-        function displayItems(category) {
-            const tableBodyId = category === 'tintas' ? 'tintasTableBody' : 'papeisTableBody';
-            const tableBody = document.getElementById(tableBodyId);
-            tableBody.innerHTML = "";
-
-            database.ref(category).once("value")
-                .then(snapshot => {
-                    const items = snapshot.val();
-
-                    if (items) {
-                        for (const key in items) {
-                            const item = items[key];
-                            const newRow = document.createElement("tr");
-                            newRow.innerHTML = `<td>${item.nome}</td>
-                                               <td class="quantityContainer">
-                                                   <span class="quantity">${item.quantidade}</span>
-                                                   <button class="increaseButton"
-                                                       onclick="changeQuantity('${category}', '${key}', 'increase')">
-                                                       <span class="editIcon">&#43;</span>
-                                                   </button>
-                                                   <button class="decreaseButton"
-                                                       onclick="changeQuantity('${category}', '${key}', 'decrease')">
-                                                       <span class="editIcon">&#8722;</span>
-                                                   </button>
-                                               </td>`;
-                            tableBody.appendChild(newRow);
+                        if (items) {
+                            for (const key in items) {
+                                const item = items[key];
+                                const newRow = document.createElement("tr");
+                                newRow.innerHTML = `<td>${item.nome}</td>
+                                                   <td class="quantityContainer">
+                                                       <span class="quantity">${item.quantidade}</span>
+                                                       <button class="increaseButton"
+                                                           onclick="changeQuantity('${category}', '${key}', 'increase')">
+                                                           <span class="editIcon">&#43;</span>
+                                                       </button>
+                                                       <button class="decreaseButton"
+                                                           onclick="changeQuantity('${category}', '${key}', 'decrease')">
+                                                           <span class="editIcon">&#8722;</span>
+                                                       </button>
+                                                   </td>`;
+                                tableBody.appendChild(newRow);
+                            }
                         }
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao obter os dados do Firebase:', error);
-                });
-        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao obter os dados do Firebase:', error);
+                    });
+            }
 
-        // Editar quantidade
-        function changeQuantity(category, itemName, action) {
-            const itemRef = database.ref(`${category}/${itemName}`);
+            // Editar quantidade
+            function changeQuantity(category, itemName, action) {
+                const itemRef = database.ref(`${category}/${itemName}`);
 
-            itemRef.once("value")
-                .then(snapshot => {
-                    const item = snapshot.val();
-                    let novaQuantidade = item.quantidade;
+                itemRef.once("value")
+                    .then(snapshot => {
+                        const item = snapshot.val();
+                        let novaQuantidade = item.quantidade;
 
-                    if (action === 'increase') {
-                        novaQuantidade++;
-                    } else if (action === 'decrease' && novaQuantidade > 0) {
-                        novaQuantidade--;
-                    }
+                        if (action === 'increase') {
+                            novaQuantidade++;
+                        } else if (action === 'decrease' && novaQuantidade > 0) {
+                            novaQuantidade--;
+                        }
 
-                    // Atualizar a quantidade no Firebase
-                    itemRef.update({ quantidade: novaQuantidade });
+                        // Atualizar a quantidade no Firebase
+                        itemRef.update({ quantidade: novaQuantidade });
 
-                    // Atualizar a exibição
-                    displayItems(category);
-                })
-                .catch(error => {
-                    console.error('Erro ao obter os dados do Firebase:', error);
-                });
-        }
+                        // Atualizar a exibição
+                        displayItems(category);
+                    })
+                    .catch(error => {
+                        console.error('Erro ao obter os dados do Firebase:', error);
+                    });
+            }
 
-        // Carregar itens ao carregar a página
-        window.onload = function () {
+            // Carregar itens ao carregar a página
             displayItems('tintas');
             displayItems('papeis');
-        };
+            displayItems('tecidos');
+        });
     </script>
 
 </body>
