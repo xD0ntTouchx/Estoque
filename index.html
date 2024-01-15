@@ -311,19 +311,18 @@
 
             // Adicionar itens ao Firebase se não existirem
             function addItemsToFirebase(category, items) {
+                var promises = [];
                 for (var [key, item] of Object.entries(items)) {
-                    database.ref(`${category}/${key}`).once('value')
+                    var promise = database.ref(`${category}/${key}`).once('value')
                         .then(snapshot => {
                             if (!snapshot.exists()) {
-                                database.ref(`${category}/${key}`).set(item);
+                                return database.ref(`${category}/${key}`).set(item);
                             }
                         });
+                    promises.push(promise);
                 }
+                return Promise.all(promises);
             }
-
-            addItemsToFirebase('tintas', itensTintas);
-            addItemsToFirebase('papeis', itensPapeis);
-            addItemsToFirebase('tecidos', itensTecidos);
 
             // Exibir itens
             function displayItems(category) {
@@ -387,9 +386,14 @@
             }
 
             // Carregar itens ao carregar a página
-            displayItems('tintas');
-            displayItems('papeis');
-            displayItems('tecidos');
+            addItemsToFirebase('tintas', itensTintas)
+                .then(() => displayItems('tintas'));
+
+            addItemsToFirebase('papeis', itensPapeis)
+                .then(() => displayItems('papeis'));
+
+            addItemsToFirebase('tecidos', itensTecidos)
+                .then(() => displayItems('tecidos'));
         });
     </script>
 
