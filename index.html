@@ -165,6 +165,41 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
+        // Função para exibir itens
+        function displayItems(category) {
+            var tableBodyId = `${category}TableBody`;
+            var tableBody = document.getElementById(tableBodyId);
+            tableBody.innerHTML = "";
+
+            firebase.database().ref(category).once("value")
+                .then(snapshot => {
+                    var items = snapshot.val();
+
+                    if (items) {
+                        for (var key in items) {
+                            var item = items[key];
+                            var newRow = document.createElement("tr");
+                            newRow.innerHTML = `<td>${item.nome}</td>
+                                               <td class="quantityContainer">
+                                                   <span class="quantity">${item.quantidade}</span>
+                                                   <button class="increaseButton"
+                                                       onclick="changeQuantity('${category}', '${key}', 'increase')">
+                                                       <span class="editIcon">&#43;</span>
+                                                   </button>
+                                                   <button class="decreaseButton"
+                                                       onclick="changeQuantity('${category}', '${key}', 'decrease')">
+                                                       <span class="editIcon">&#8722;</span>
+                                                   </button>
+                                               </td>`;
+                            tableBody.appendChild(newRow);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao obter os dados do Firebase:', error);
+                });
+        }
+
         // Função para mudar a quantidade
         function changeQuantity(category, itemName, action) {
             var itemRef = firebase.database().ref(`${category}/${itemName}`);
@@ -205,9 +240,6 @@
 
             // Inicialização do Firebase
             firebase.initializeApp(firebaseConfig);
-
-            // Referência ao banco de dados do Firebase
-            var database = firebase.database();
 
             // Itens predefinidos
             var itensTintas = {
@@ -339,7 +371,7 @@
             function addItemsToFirebase(category, items) {
                 var promises = [];
                 for (var [key, item] of Object.entries(items)) {
-                    var itemRef = database.ref(`${category}/${key}`);
+                    var itemRef = firebase.database().ref(`${category}/${key}`);
                     promises.push(itemRef.transaction(function (currentData) {
                         if (currentData === null) {
                             return item;
@@ -347,41 +379,6 @@
                     }));
                 }
                 return Promise.all(promises);
-            }
-
-            // Exibir itens
-            function displayItems(category) {
-                var tableBodyId = `${category}TableBody`;
-                var tableBody = document.getElementById(tableBodyId);
-                tableBody.innerHTML = "";
-
-                database.ref(category).once("value")
-                    .then(snapshot => {
-                        var items = snapshot.val();
-
-                        if (items) {
-                            for (var key in items) {
-                                var item = items[key];
-                                var newRow = document.createElement("tr");
-                                newRow.innerHTML = `<td>${item.nome}</td>
-                                                   <td class="quantityContainer">
-                                                       <span class="quantity">${item.quantidade}</span>
-                                                       <button class="increaseButton"
-                                                           onclick="changeQuantity('${category}', '${key}', 'increase')">
-                                                           <span class="editIcon">&#43;</span>
-                                                       </button>
-                                                       <button class="decreaseButton"
-                                                           onclick="changeQuantity('${category}', '${key}', 'decrease')">
-                                                           <span class="editIcon">&#8722;</span>
-                                                       </button>
-                                                   </td>`;
-                                tableBody.appendChild(newRow);
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro ao obter os dados do Firebase:', error);
-                    });
             }
 
             // Carregar itens ao carregar a página
