@@ -163,11 +163,11 @@
     <div class="signature">Made by Filipin</div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Configuração do Firebase
-            const firebaseConfig = {
+            var firebaseConfig = {
                 apiKey: "AIzaSyDICa5qOP8Z48Hwx4J2DuSK_Wkpjja6W-s",
                 authDomain: "estoque-5b592.firebaseapp.com",
                 databaseURL: "https://estoque-5b592-default-rtdb.firebaseio.com",
@@ -181,102 +181,102 @@
             firebase.initializeApp(firebaseConfig);
 
             // Referência ao banco de dados do Firebase
-            const database = firebase.database();
+            var database = firebase.database();
 
             // Itens predefinidos
-            const itensTintas = {
+            var itensTintas = {
                 CIANO: {
-                    nome: 'CIANO',
+                    nome: 'Ciano',
                     quantidade: 0
                 },
                 MAGENTA: {
-                    nome: 'MAGENTA',
+                    nome: 'Magenta',
                     quantidade: 2
                 },
                 AMARELO: {
-                    nome: 'AMARELO',
+                    nome: 'Amarelo',
                     quantidade: 3
                 },
                 PRETO: {
-                    nome: 'PRETO',
+                    nome: 'Preto',
                     quantidade: 0
                 }
             };
 
-            const itensPapeis = {
+            var itensPapeis = {
                 SEDA50G: {
-                    nome: 'SEDA 50G',
+                    nome: 'Seda 50G',
                     quantidade: 0
                 },
                 LISO60G: {
-                    nome: 'LISO 60G',
+                    nome: 'Liso 60G',
                     quantidade: 0
                 },
                 HAVIR: {
-                    nome: 'HAVIR',
+                    nome: 'Havir',
                     quantidade: 2
                 },
                 TRATADO160M: {
-                    nome: 'TRATADO 1,60M',
+                    nome: 'Tratado 1,60M',
                     quantidade: 11
                 },
                 VEGETAL_A3: {
-                    nome: 'VEGETAL A3',
+                    nome: 'Vegetal A3',
                     quantidade: 0
                 },
                 KRAFT: {
-                    nome: 'KRAFT',
+                    nome: 'Kraft',
                     quantidade: 3
                 },
                 VEGETAL_A4: {
-                    nome: 'VEGETAL A4',
+                    nome: 'Vegetal A4',
                     quantidade: 0
                 }
             };
 
-            const itensTecidos = {
+            var itensTecidos = {
                 "HELANCA_LIGHT": {
-                    nome: 'HELANCA LIGHT / 1,80M',
+                    nome: 'Helanca Light / 1,80M',
                     quantidade: 3
                 },
                 "DRY_SPORT_BRASIL": {
-                    nome: 'DRY SPORT BRASIL / 1,80M',
+                    nome: 'Dry Sport Brasil / 1,80M',
                     quantidade: 26
                 },
                 "DRY_180_EF": {
-                    nome: 'DRY 180 EF / 1,80M',
+                    nome: 'Dry 180 EF / 1,80M',
                     quantidade: 6
                 },
                 "DRY_180_PLUS_EF": {
-                    nome: 'DRY 180 PLUS EF / 1,60M',
+                    nome: 'Dry 180 Plus EF / 1,60M',
                     quantidade: 0
                 },
                 "JIMP_DRY_BRASIL_180M": {
-                    nome: 'JIMP DRY BRASIL / 1,80M',
+                    nome: 'Jimp Dry Brasil / 1,80M',
                     quantidade: 16
                 },
                 "JIMP_DRY_BRASIL_160M": {
-                    nome: 'JIMP DRY BRASIL / 1,60M',
+                    nome: 'Jimp Dry Brasil / 1,60M',
                     quantidade: 17
                 },
                 "MANCHESTER_MADRID_180M": {
-                    nome: 'MANCHESTER / MADRID / 1,80M',
+                    nome: 'Manchester / Madrid / 1,80M',
                     quantidade: 3
                 },
                 "DRY_UV_EMATEX_160M": {
-                    nome: 'DRY UV EMATEX / 1,60M',
+                    nome: 'Dry UV Ematex / 1,60M',
                     quantidade: 4
                 },
                 "GABARDINE_150M": {
-                    nome: 'GABARDINE / 1,50M',
+                    nome: 'Gabardine / 1,50M',
                     quantidade: 0
                 },
                 "CHIMPA_160M": {
-                    nome: 'CHIMPA / 1,60M',
+                    nome: 'Chimpa / 1,60M',
                     quantidade: 5
                 },
                 "FURADINHO_160M": {
-                    nome: 'FURADINHO / 1,60M',
+                    nome: 'Furadinho / 1,60M',
                     quantidade: 1
                 },
                 "NBA_160M": {
@@ -284,34 +284,34 @@
                     quantidade: 2
                 },
                 "NBA_FURADO_160M": {
-                    nome: 'NBA FURADO / 1,60M',
+                    nome: 'NBA Furado / 1,60M',
                     quantidade: 1
                 },
                 "OXFORD_150M": {
-                    nome: 'OXFORD / 1,50M',
+                    nome: 'Oxford / 1,50M',
                     quantidade: 0
                 },
                 "OXFORDINE_150M": {
-                    nome: 'OXFORDINE / 1,50M',
+                    nome: 'Oxfordine / 1,50M',
                     quantidade: 0
                 },
                 "MICROFIBRA_180M": {
-                    nome: 'MICROFIBRA / 1,80M',
+                    nome: 'Microfibra / 1,80M',
                     quantidade: 0
                 },
                 "QUADRADINHO": {
-                    nome: 'QUADRADINHO',
+                    nome: 'Quadrado',
                     quantidade: 1
                 },
                 "TACTEL": {
-                    nome: 'TACTEL',
+                    nome: 'Tactel',
                     quantidade: 1
                 }
             };
 
             // Adicionar itens ao Firebase se não existirem
             function addItemsToFirebase(category, items) {
-                for (const [key, item] of Object.entries(items)) {
+                for (var [key, item] of Object.entries(items)) {
                     database.ref(`${category}/${key}`).once('value')
                         .then(snapshot => {
                             if (!snapshot.exists()) {
@@ -327,18 +327,18 @@
 
             // Exibir itens
             function displayItems(category) {
-                const tableBodyId = `${category}TableBody`;
-                const tableBody = document.getElementById(tableBodyId);
+                var tableBodyId = `${category}TableBody`;
+                var tableBody = document.getElementById(tableBodyId);
                 tableBody.innerHTML = "";
 
                 database.ref(category).once("value")
                     .then(snapshot => {
-                        const items = snapshot.val();
+                        var items = snapshot.val();
 
                         if (items) {
-                            for (const key in items) {
-                                const item = items[key];
-                                const newRow = document.createElement("tr");
+                            for (var key in items) {
+                                var item = items[key];
+                                var newRow = document.createElement("tr");
                                 newRow.innerHTML = `<td>${item.nome}</td>
                                                    <td class="quantityContainer">
                                                        <span class="quantity">${item.quantidade}</span>
@@ -362,12 +362,12 @@
 
             // Editar quantidade
             function changeQuantity(category, itemName, action) {
-                const itemRef = database.ref(`${category}/${itemName}`);
+                var itemRef = database.ref(`${category}/${itemName}`);
 
                 itemRef.once("value")
                     .then(snapshot => {
-                        const item = snapshot.val();
-                        let novaQuantidade = item.quantidade;
+                        var item = snapshot.val();
+                        var novaQuantidade = item.quantidade;
 
                         if (action === 'increase') {
                             novaQuantidade++;
