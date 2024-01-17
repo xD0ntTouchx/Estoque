@@ -72,27 +72,13 @@
             color: white;
         }
 
-        .increaseButton,
-        .decreaseButton {
-            background-color: transparent;
-            border: none;
-            padding: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin: 2px;
-        }
-
-        .increaseButton:hover,
-        .decreaseButton:hover {
-            background-color: #e5e5e5;
-        }
-
         .quantityContainer {
             display: flex;
             align-items: center;
         }
 
-        .quantity {
+        .quantityInput {
+            width: 50px;
             margin-right: 5px;
             font-weight: bold;
         }
@@ -181,15 +167,7 @@
                             var newRow = document.createElement("tr");
                             newRow.innerHTML = `<td>${item.nome}</td>
                                                <td class="quantityContainer">
-                                                   <span class="quantity">${item.quantidade}</span>
-                                                   <button class="increaseButton"
-                                                       onclick="changeQuantity('${category}', '${key}', 'increase')">
-                                                       <span class="editIcon">&#43;</span>
-                                                   </button>
-                                                   <button class="decreaseButton"
-                                                       onclick="changeQuantity('${category}', '${key}', 'decrease')">
-                                                       <span class="editIcon">&#8722;</span>
-                                                   </button>
+                                                   <input type="number" class="quantityInput" value="${item.quantidade}" onchange="changeQuantity('${category}', '${key}', this.value)">
                                                </td>`;
                             tableBody.appendChild(newRow);
                         }
@@ -201,25 +179,24 @@
         }
 
         // Função para mudar a quantidade
-        function changeQuantity(category, itemName, action) {
+        function changeQuantity(category, itemName, newQuantity) {
             var itemRef = firebase.database().ref(`${category}/${itemName}`);
 
             itemRef.once("value")
                 .then(snapshot => {
                     var item = snapshot.val();
-                    var novaQuantidade = item.quantidade;
+                    var parsedQuantity = parseInt(newQuantity);
 
-                    if (action === 'increase') {
-                        novaQuantidade++;
-                    } else if (action === 'decrease' && novaQuantidade > 0) {
-                        novaQuantidade--;
+                    if (!isNaN(parsedQuantity) && parsedQuantity >= 0) {
+                        // Atualizar a quantidade no Firebase
+                        itemRef.update({ quantidade: parsedQuantity });
+
+                        // Atualizar a exibição
+                        displayItems(category);
+                    } else {
+                        alert("Por favor, insira um valor numérico não negativo.");
+                        // Você pode adicionar um tratamento mais robusto de erro conforme necessário.
                     }
-
-                    // Atualizar a quantidade no Firebase
-                    itemRef.update({ quantidade: novaQuantidade });
-
-                    // Atualizar a exibição
-                    displayItems(category);
                 })
                 .catch(error => {
                     console.error('Erro ao obter os dados do Firebase:', error);
