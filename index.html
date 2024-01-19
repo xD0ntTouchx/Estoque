@@ -95,7 +95,7 @@
             margin-top: auto;
             margin-bottom: 10px;
         }
-    </style>
+     </style>
 </head>
 
 <body>
@@ -213,7 +213,7 @@
                 storageBucket: "estoque-5b592.appspot.com",
                 messagingSenderId: "277205455610",
                 appId: "1:277205455610:web:a677fe7c54ad933da4ef43",
-            };
+             };
 
             // Inicialização do Firebase
             firebase.initializeApp(firebaseConfig);
@@ -259,14 +259,22 @@
                     nome: 'Vegetal A3',
                     quantidade: 0
                 },
-                KRAFT: {
-                    nome: 'Kraft',
+                KRAFT_180M_30G: {
+                    nome: 'Kraft 1,80M 30G',
                     quantidade: 3
+                },
+                KRAFT_180M_40G: {
+                    nome: 'Kraft 1,80M 40G',
+                    quantidade: 0
+                },
+                KRAFT_160M_40G: {
+                    nome: 'Kraft 1,60M 40G',
+                    quantidade: 0
                 },
                 VEGETAL_A4: {
                     nome: 'Vegetal A4',
                     quantidade: 0
-                }
+                },
             };
 
             var itensTecidos = {
@@ -344,7 +352,7 @@
                 }
             };
 
-            // Adicionar itens ao Firebase se não existirem
+             // Adicionar itens ao Firebase se não existirem
             function addItemsToFirebase(category, items) {
                 var promises = [];
                 for (var [key, item] of Object.entries(items)) {
